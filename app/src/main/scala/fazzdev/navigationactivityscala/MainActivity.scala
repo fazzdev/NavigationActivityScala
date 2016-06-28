@@ -28,7 +28,7 @@ class MainActivity extends AppCompatActivity with RichActivity with NavigationVi
     )
 
     val toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-    drawerLayout.setDrawerListener(toggle)
+    drawerLayout.addDrawerListener(toggle)
     toggle.syncState()
 
     val navigationView = findView[NavigationView](R.id.nav_view)
