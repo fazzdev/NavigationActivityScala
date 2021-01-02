@@ -1,17 +1,19 @@
 package fazzdev.navigationactivityscala
 
 import android.os.Bundle
-import android.support.design.widget.{FloatingActionButton, NavigationView, Snackbar}
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.{ActionBarDrawerToggle, AppCompatActivity}
-import android.support.v7.widget.Toolbar
 import android.view.{Menu, MenuItem}
+import androidx.appcompat.app.{ActionBarDrawerToggle, AppCompatActivity}
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import fazzdev.android.RichActivity
 import fazzdev.android.ViewExtensions._
 
 class MainActivity extends AppCompatActivity with RichActivity with NavigationView.OnNavigationItemSelectedListener {
-  lazy val drawerLayout = findView[DrawerLayout](R.id.drawer_layout)
+  private lazy val drawerLayout = findView[DrawerLayout](R.id.drawer_layout)
 
   override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(savedInstanceState)
@@ -22,7 +24,7 @@ class MainActivity extends AppCompatActivity with RichActivity with NavigationVi
 
     val floatingActionButton = findView[FloatingActionButton](R.id.fab)
     floatingActionButton.onClick(view =>
-      Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        Snackbar.make(view, "Replace with your own action", 0) //Snackbar.LENGTH_LONG)
         .setAction("Action", null)
         .show()
     )
@@ -36,25 +38,26 @@ class MainActivity extends AppCompatActivity with RichActivity with NavigationVi
   }
 
   override def onBackPressed() {
-    drawerLayout.isDrawerOpen(GravityCompat.START) match {
-      case true => drawerLayout.closeDrawer(GravityCompat.START)
-      case _ => super.onBackPressed()
+    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+      drawerLayout.closeDrawer(GravityCompat.START)
+    } else {
+      super.onBackPressed()
     }
   }
 
-  override def onCreateOptionsMenu(menu: Menu) = {
+  override def onCreateOptionsMenu(menu: Menu): Boolean = {
     getMenuInflater.inflate(R.menu.main, menu)
     true
   }
 
-  override def onOptionsItemSelected(item: MenuItem) = {
+  override def onOptionsItemSelected(item: MenuItem): Boolean = {
     if (item.getItemId == R.id.action_settings)
       true
     else
       super.onOptionsItemSelected(item)
   }
 
-  def onNavigationItemSelected(item: MenuItem) = {
+  def onNavigationItemSelected(item: MenuItem): Boolean = {
     item.getItemId match {
       case R.id.nav_camera =>
       case R.id.nav_gallery =>
